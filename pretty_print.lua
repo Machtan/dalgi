@@ -73,7 +73,7 @@ local function i_prettify(item, indent, table_pointers)
             end
             return text
         end
-    elseif t == "text" then
+    elseif t == "string" then
         return "\"" .. string.gsub(string.gsub(item, "\\", "\\\\"), "\"", "\\\"") .. "\""
     else
         return tostring(item)
