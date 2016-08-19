@@ -1,9 +1,31 @@
 local M = {}
 
+local Sprite = {}
+
+function Sprite:new(sheet, id)
+    local obj = {
+        sheet = sheet,
+        id = id,
+    }
+    self.__index = self
+    return setmetatable(obj, self)
+end
+
+function Sprite:draw(x, y, r, sx, sy, ox, oy, kx, ky)
+    self.sheet:draw(self.id, x, y, r, sx, sy, ox, oy, kx, ky)
+end
+
+function Sprite:center()
+    return self.sheet:center(self.id)
+end
+
+function Sprite:__tostring()
+    return "Sprite("..self.id..")"
+end
+
 local SpriteSheet = {}
 
-function SpriteSheet:new(filepath)
-    local image = love.graphics.newImage(filepath)
+function SpriteSheet:from_image(image)
     local w, h = image:getDimensions()
     local obj = {
         image = image, 
@@ -15,8 +37,21 @@ function SpriteSheet:new(filepath)
     return setmetatable(obj, self)
 end
 
+function SpriteSheet:new(filepath)
+    local image = love.graphics.newImage(filepath)
+    return SpriteSheet:from_image(image)
+end
+
 function SpriteSheet:define_sprite(name, x, y, w, h)
     self.sprites[name] = love.graphics.newQuad(x, y, w, h, self.w, self.h)
+end
+
+function SpriteSheet:sprite(name)
+    if self.sprites[name] == nil then
+        error("Unknown sprite '"..name.."'")
+    else
+        return Sprite:new(self, name)
+    end
 end
 
 function SpriteSheet:draw(name, x, y, r, sx, sy, ox, oy, kx, ky)

@@ -1,9 +1,5 @@
 local M = {}
 
-local function pad(indent)
-    return 
-end
-
 local function i_prettify(item, indent, table_pointers)
     local t = type(item)
     if t == "table" then
@@ -38,8 +34,13 @@ local function i_prettify(item, indent, table_pointers)
             else
                 local max_key_len = 0
                 local keys = {}
+                local has_values = false
                 for k, _ in pairs(item) do
                     table.insert(keys, k)
+                    has_values = true
+                end
+                if not has_values then
+                    return "[]"
                 end
                 table.sort(keys, function (a, b)
                     return a < b
@@ -57,19 +58,14 @@ local function i_prettify(item, indent, table_pointers)
                 end
                 text = "{ &"..tostring(current_id)
                 local pretty_value
-                local has_values = false
+                
                 for _, k in ipairs(keys) do
                     local pair = items[k]
                     local key_pad = max_key_len - string.len(pair[1])
                     text = text .. "\n" .. newp .. pair[1] .. ": "
                     text = text .. string.rep(" ", key_pad) .. pair[2] .. ","
-                    has_values = true
                 end
-                if not has_values then
-                    text = text .. " ... }"
-                else
-                    text = text .. "\n" .. oldp .. "}"
-                end
+                text = text .. "\n" .. oldp .. "}"
             end
             return text
         end
