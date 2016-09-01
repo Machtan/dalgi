@@ -14,6 +14,22 @@ function Rect:from_center(cx, cy, width, height)
     return Rect:new(x, y, width, height)
 end
 
+function Rect:from_table(table)
+    return Rect:new(table.x, table.y, table.width, table.height)
+end
+
+function Rect:from_points(x1, y1, x2, y2)
+    local x = math.min(x1, x2)
+    local w = math.max(x1, x2) - x
+    local y = math.min(y1, y2)
+    local h = math.max(y1, y2) - y
+    return Rect:new(x, y, w, h)
+end
+
+function Rect:unpack()
+    return self.x, self.y, self.width, self.height
+end
+
 function Rect:clone()
     return Rect:new(self.x, self.y, self.width, self.height)
 end
@@ -64,8 +80,7 @@ function Rect:intersects(other_rect)
     return self:right() > other_rect:left() and self:left() < other_rect:right() and self:top() < other_rect:bottom() and self:bottom() > other_rect:top()
 end
 
-function Rect:contains(point)
-    local x, y = point
+function Rect:contains(x, y)
     return x > self.x and x < self:right() and y > self.y and y < self:bottom()
 end
 

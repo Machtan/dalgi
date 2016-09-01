@@ -1,3 +1,4 @@
+local local_path = (...):match('(.-)[^%.]+$')
 local path = (...)
 local prefix = (path and path.."." or "")
 
@@ -10,6 +11,7 @@ local include = {
     "pretty_print",
     "pixel_collider",
     "safe_ffi_dlopen",
+    "entity_group",
 }
 
 for _, modname in ipairs(include) do
