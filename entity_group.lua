@@ -94,7 +94,7 @@ function EntityGroup:remove(entity)
         end
     end
     
-    for _, category in ipairs(_listeners) do
+    for _, category in ipairs(LISTENERS) do
         if entity[category] ~= nil then
             for i, ent in ipairs(self._listeners[category]) do
                 if ent == entity then
